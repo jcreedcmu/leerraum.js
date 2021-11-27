@@ -1,12 +1,12 @@
 import { linebreak, infinity } from './typeset/linebreak';
 
-const PDFDocument = require('pdfkit');
-const fs = require('fs');
+import * as PDFDocument from 'pdfkit';
+import * as fs from 'fs';
 
-const Hypher = require('hypher');
-const en = require('hyphenation.en-us');
+import * as Hypher from 'hypher';
+import * as hyphenationEnUs from 'hyphenation.en-us';
 
-const hypher_en = new Hypher(en);
+const hypher_en = new Hypher(hyphenationEnUs);
 
 import * as T from './Types';
 import * as U from './Utils';
@@ -434,7 +434,8 @@ export function renderToPDF(
     };
   }
 
-  renderToPages(doc, format, renderers.map((r) => r.renderer(measures, r.bboxes)[1]), background_);
+  const renderData = renderers.map((r) => r.renderer(measures, r.bboxes)[1]);
+  renderToPages(doc, format, renderData, background_);
 
   doc.end();
 }
