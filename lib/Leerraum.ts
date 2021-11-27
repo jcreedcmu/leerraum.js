@@ -351,8 +351,10 @@ export function renderToPages(doc, format: T.Format, layers: T.RenderNode[][], b
     }
   }
 
-  const pages = Array(page_count + 1).fill([]);
-
+  const pages: any[] = [];
+  for (let i = 0; i < page_count + 1; i++) {
+    pages[i] = [];
+  }
   if (background) {
     for (let page = 0; page <= page_count; page++) {
       for (let layer of background(page)) {
