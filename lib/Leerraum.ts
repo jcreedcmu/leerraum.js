@@ -434,8 +434,27 @@ export function renderToPDF(
     };
   }
 
-  const renderData = renderers.map((r) => r.renderer(measures, r.bboxes)[1]);
-  renderToPages(doc, format, renderData, background_);
+  const layers = renderers.map((r) => r.renderer(measures, r.bboxes)[1]);
+  fs.writeFileSync('/tmp/a.json', JSON.stringify({ format, layers }, null, 2));
+  renderToPages(doc, format, layers, background_);
+
+  doc.end();
+}
+
+export function renderToPDFDebug(
+  filename: string, format: any, layers: any
+): void {
+
+  //  const { format, layers } = JSON.parse(fs.readFileSync('/tmp/a.json', 'utf8'));
+
+  const doc = new PDFDocument({
+    layout: 'portrait',
+    size: [format.width, format.height]
+  });
+
+  doc.pipe(fs.createWriteStream(filename));
+
+  renderToPages(doc, format, layers, undefined);
 
   doc.end();
 }

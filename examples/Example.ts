@@ -123,29 +123,48 @@ function regularPolygon(edges: number, offseta: number, offsetx: number, offsety
   });
 }
 
-leer.renderToPDF('example.pdf', leer.formats.A4, [
-  {
-    bboxes: leer.columnsWithMargins(leer.formats.A4, 42, 32, 32, 32, 32),
-    renderer: leer.vertically(
-      [
-        leer.renderParagraph(title('РЕШЕТКА')),
+if (0) {
+  leer.renderToPDF('example.pdf', leer.formats.A4, [
+    {
+      bboxes: leer.columnsWithMargins(leer.formats.A4, 42, 32, 32, 32, 32),
+      renderer: leer.vertically(
+        [
+          leer.renderParagraph(title('РЕШЕТКА')),
 
-        leer.renderText(text('In graphic design,', gridText)),
-
-
-        gap(leading),
-
-        leer.renderText(text('Whil grid systems', gridText2)),
-        leer.renderParagraph(subtitle('Polygons')),
+          leer.renderText(text('In graphic design,', gridText)),
 
 
+          gap(leading),
 
-        leer.renderPolygon(regularPolygon(8, 0, 100, 100, 100), { fillColor: '#770' }),
+          leer.renderText(text('Whil grid systems', gridText2)),
+          leer.renderParagraph(subtitle('Polygons')),
 
 
 
-        leer.renderText(text('Whil grid systems', gridText2)),
+          leer.renderPolygon(regularPolygon(8, 0, 100, 100, 100), { fillColor: '#770' }),
 
-      ])
-  }
-]);
+
+
+          leer.renderText(text('Whil grid systems', gridText2)),
+
+        ])
+    }
+  ]);
+}
+else {
+  const format = { width: 500, height: 500 };
+  const poly = {
+    "type": "polygon", x: 300, y: 300,
+    points: [{ x: 50, y: 50 }, { x: 150, y: 100 }, { x: 50, y: 150 }],
+    style: { fillColor: "#f00" }
+  };
+  const text = {
+    "type": "text", x: 50, y: 750,
+    span: {
+      fontFamily: "fonts/Oswald-Light.ttf",
+      fontSize: 36
+    },
+    text: "some text"
+  };
+  leer.renderToPDFDebug('example.pdf', format, [[poly, text]]);
+}
