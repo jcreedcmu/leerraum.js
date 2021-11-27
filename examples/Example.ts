@@ -9,7 +9,7 @@ function rgb(r, g, b) {
   return '#' + ('0' + r.toString(16)).slice(-2) + ('0' + g.toString(16)).slice(-2) + ('0' + b.toString(16)).slice(-2);
 }
 
-const gridText = ' a grid is a structure (usually two-dimensional) made up of a series of intersecting straight (vertical, horizontal, and angular) or curved guide lines used to structure content. The grid serves as an armature or framework on which a designer can organize graphic elements (images, glyphs, paragraphs, etc.) in a rational, easy-to-absorb manner. A grid can be used to organize graphic elements in relation to a page, in relation to other graphic elements on the page, or relation to other parts of the same graphic element or shape.';
+const gridText = ' a grid is a structure (usually two-dimensional) made up of a series of intersecting straight (vertical, horizontal, and angular) or curved guide lines used to structure content. The grid serves as an armature or framework on which a designer can organize graphic elements (images, glyphs, paragraphs, etc.) in a rational, easy-to-absorb manner. A grid can be used to organize graphic elements in relation to a page, in relation to other graphic elements on the page, or relation to other parts of the same graphic element or shape. a grid is a structure (usually two-dimensional) made up of a series of intersecting straight (vertical, horizontal, and angular) or curved guide lines used to structure content. The grid serves as an armature or framework on which a designer can organize graphic elements (images, glyphs, paragraphs, etc.) in a rational, easy-to-absorb manner. A grid can be used to organize graphic elements in relation to a page, in relation to other graphic elements on the page, or relation to other parts of the same graphic element or shape. a grid is a structure (usually two-dimensional) made up of a series of intersecting straight (vertical, horizontal, and angular) or curved guide lines used to structure content. The grid serves as an armature or framework on which a designer can organize graphic elements (images, glyphs, paragraphs, etc.) in a rational, easy-to-absorb manner. A grid can be used to organize graphic elements in relation to a page, in relation to other graphic elements on the page, or relation to other parts of the same graphic element or shape. a grid is a structure (usually two-dimensional) made up of a series of intersecting straight (vertical, horizontal, and angular) or curved guide lines used to structure content. The grid serves as an armature or framework on which a designer can organize graphic elements (images, glyphs, paragraphs, etc.) in a rational, easy-to-absorb manner. A grid can be used to organize graphic elements in relation to a page, in relation to other graphic elements on the page, or relation to other parts of the same graphic element or shape.';
 const gridText2 = ' have seen significant use in print media, interest from web developers has only recently seen a resurgence. Website design frameworks producing HTML and CSS had existed for a while before newer frameworks popularised the use of grid-based layouts. Some grid systems specify fixed-width elements with pixels, and some are "fluid", meaning that they call for page element sizing to be in relative units like percentages, rather than absolute units like pixels or points.';
 
 const s: leer.Span =
@@ -20,7 +20,7 @@ const s: leer.Span =
   hyphenate: true,
   text: '',
   style: {
-    fillColor: '#333333',
+    fillColor: '#000',
   },
 };
 
@@ -46,7 +46,7 @@ function gap(leading_?): leer.Renderer {
 function title(title: string): leer.Paragraph {
   return {
     ...p,
-    leading: leading * 3,
+    leading: 32,
     paragraphLeading: leading,
     spans:
       [
@@ -54,7 +54,7 @@ function title(title: string): leer.Paragraph {
           ...s,
           fontFamily: oswald,
           hyphenate: false,
-          fontSize: 64,
+          fontSize: 32,
           text: title,
         },
       ]
@@ -82,12 +82,14 @@ function text(emphasized: string, text: string): leer.Text {
     {
       ...p,
       align: 'justify',
-      paragraphLeading: leading,
+      paragraphLeading: leading * 3,
       spans:
         [
           {
             ...s,
-            fontSize: 21,
+            style: { fillColor: 'blue' },
+            fontFamily: oswald,
+            fontSize: 36,
             text: emphasized,
           },
           {
@@ -123,64 +125,27 @@ function regularPolygon(edges: number, offseta: number, offsetx: number, offsety
 
 leer.renderToPDF('example.pdf', leer.formats.A4, [
   {
-    bboxes: leer.columnsWithMargins(leer.formats.A4, 42, 64, 64, 64, 64),
+    bboxes: leer.columnsWithMargins(leer.formats.A4, 42, 32, 32, 32, 32),
     renderer: leer.vertically(
       [
         leer.renderParagraph(title('РЕШЕТКА')),
 
         leer.renderText(text('In graphic design,', gridText)),
-        leer.renderParagraph(subtitle('Tables')),
 
-        leer.renderTable(12, [70, 70, 70], [
-          [
-            fillerText("Cell 1/1", 1),
-            fillerText("Cell 2/1", 3),
-            fillerText("Cell 3/1", 2),
-          ],
-          [
-            fillerText("Cell 1/2", 1),
-            fillerText("Cell 2/2", 1),
-            fillerText("Cell 3/2", 3),
-          ]
-        ]),
 
         gap(leading),
 
-        leer.renderText(text('While grid systems', gridText2)),
+        leer.renderText(text('Whil grid systems', gridText2)),
         leer.renderParagraph(subtitle('Polygons')),
 
-        gap(leading),
 
-        leer.renderPolygon(regularPolygon(8, 0, 100, 100, 100), { fillColor: '#333333' }),
 
-        gap(leading),
+        leer.renderPolygon(regularPolygon(8, 0, 100, 100, 100), { fillColor: '#770' }),
 
-        leer.renderPolygon(regularPolygon(3, 24.8, 110, 100, 100), { fillColor: '#ffffff' }),
+
+
+        leer.renderText(text('Whil grid systems', gridText2)),
+
       ])
   }
-], (page) => {
-  return [
-    {
-      bboxes: leer.withMargins(leer.formats.A4, 0, 0, 0, 0),
-      renderer: leer.renderPolygon([
-        { x: 0, y: 0 },
-        { x: leer.formats.A4.width, y: 0 },
-        { x: leer.formats.A4.width, y: leer.formats.A4.height },
-        { x: 0, y: leer.formats.A4.height }
-      ], {
-        fillColor: '#91dbcc'
-      })
-    },
-    {
-      bboxes: leer.withMargins(leer.formats.A4, 0, 0, 0, 0),
-      renderer: leer.renderPolygon([
-        { x: 0, y: 0 },
-        { x: leer.formats.A4.width, y: leer.formats.A4.height },
-        { x: leer.formats.A4.width, y: leer.formats.A4.height - 1 * (leer.formats.A4.height / leer.formats.A4.width) },
-        { x: 1, y: 0 }
-      ], {
-        fillColor: '#ffffff'
-      })
-    },
-  ];
-});
+]);
