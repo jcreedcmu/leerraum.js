@@ -34,6 +34,7 @@
   "author": "p.kamenarsky@gmail.com",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^7.0.18"
+    "@types/node": "^7.0.18",
+    "typescript": "^4.5.2"
   }
 }
