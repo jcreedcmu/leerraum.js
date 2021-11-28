@@ -135,18 +135,18 @@ export function linebreak(nodes, lines, settings) {
 
   // The main loop of the algorithm
   function mainLoop(node, index, nodes) {
-    var active = activeNodes.first(),
-      next = null,
-      ratio: any = 0,
-      demerits = 0,
-      candidates: any[] = [],
-      badness,
-      currentLine = 0,
-      tmpSum,
-      currentClass = 0,
-      fitnessClass,
-      candidate,
-      newNode;
+    let active: Node<Breakpoint> | null = activeNodes.first();
+    let next: Node<Breakpoint> | null = null;
+    let ratio: any = 0;
+    let demerits = 0;
+    let candidates: any[] = [];
+    let badness;
+    let currentLine = 0;
+    let tmpSum;
+    let currentClass = 0;
+    let fitnessClass;
+    let candidate;
+    let newNode;
 
     // The inner loop iterates through all the active nodes with line < currentLine and then
     // breaks out to insert the new active node candidates before looking at the next active

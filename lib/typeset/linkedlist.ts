@@ -26,27 +26,27 @@ export class LinkedList<T> {
   }
 
 
-  isLinked(node) {
+  isLinked(node: Node<T> | null): boolean {
     return !((node && node.prev === null && node.next === null && this.tail !== node && this.head !== node) || this.isEmpty());
   }
 
-  size() {
+  size(): number {
     return this.listSize;
   }
 
-  isEmpty() {
+  isEmpty(): boolean {
     return this.listSize === 0;
   }
 
-  first() {
+  first(): Node<T> | null {
     return this.head;
   }
 
-  last() {
-    return this.last;
+  last(): Node<T> | null {
+    return this.tail;
   }
 
-  toString() {
+  toString(): string {
     return this.toArray().toString();
   }
 
@@ -171,25 +171,5 @@ export class LinkedList<T> {
     }
     this.listSize -= 1;
     return this;
-  }
-
-  pop() {
-    var node = this.tail;
-    this.tail.prev.next = null;
-    this.tail = this.tail.prev;
-    this.listSize -= 1;
-    node.prev = null;
-    node.next = null;
-    return node;
-  }
-
-  shift() {
-    var node = this.head;
-    this.head.next.prev = null;
-    this.head = this.head.next;
-    this.listSize -= 1;
-    node.prev = null;
-    node.next = null;
-    return node;
   }
 }
