@@ -42,24 +42,6 @@ export class LinkedList<T> {
     return this.head;
   }
 
-  last(): Node<T> | null {
-    return this.tail;
-  }
-
-  toString(): string {
-    return this.toArray().toString();
-  }
-
-  toArray() {
-    var node = this.head;
-    const result: any[] = [];
-    while (node !== null) {
-      result.push(node);
-      node = node.next;
-    }
-    return result;
-  }
-
   // Note that modifying the list during
   // iteration is not safe.
   forEach(fun: (x: Node<T>) => void) {
@@ -68,53 +50,6 @@ export class LinkedList<T> {
       fun(node);
       node = node.next;
     }
-  }
-
-  contains(n) {
-    var node = this.head;
-    if (!this.isLinked(n)) {
-      return false;
-    }
-    while (node !== null) {
-      if (node === n) {
-        return true;
-      }
-      node = node.next;
-    }
-    return false;
-  }
-
-  at(i) {
-    var node = this.head, index = 0;
-
-    if (i >= this.listSize || i < 0) {
-      return null;
-    }
-
-    while (node !== null) {
-      if (i === index) {
-        return node;
-      }
-      node = node.next;
-      index += 1;
-    }
-    return null;
-  }
-
-  insertAfter(node, newNode) {
-    if (!this.isLinked(node)) {
-      return this;
-    }
-    newNode.prev = node;
-    newNode.next = node.next;
-    if (node.next === null) {
-      this.tail = newNode;
-    } else {
-      node.next.prev = newNode;
-    }
-    node.next = newNode;
-    this.listSize += 1;
-    return this;
   }
 
   insertBefore(node, newNode) {
@@ -134,24 +69,17 @@ export class LinkedList<T> {
   }
 
   push(node) {
-    if (this.head === null) {
-      this.unshift(node);
-    } else {
-      this.insertAfter(this.tail, node);
-    }
-    return this;
-  }
-
-  unshift(node) {
+    node.prev = this.tail;
     if (this.head === null) {
       this.head = node;
       this.tail = node;
-      node.prev = null;
-      node.next = null;
-      this.listSize += 1;
     } else {
-      this.insertBefore(this.head, node);
+      const tail = this.tail;
+      if (tail === null) throw 'nope'; // shouldn't be that head is non-null but tail is null
+      tail.next = node;
+      this.tail = node;
     }
+    this.listSize += 1;
     return this;
   }
 
