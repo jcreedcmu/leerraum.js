@@ -240,7 +240,6 @@ export function renderParagraph(paragraph: T.Paragraph): T.Renderer {
             const last_text_node = text_nodes[text_nodes.length - 1];
             if (last_text_node.type == 'text') {
               // remove trailing hyphen from preceding hyphenation segment, if any
-              console.log(`'${last_text_node.text}'`);
               if (last_text_node.text.match(/-$/)) {
                 add_hyphen = false;
               }
