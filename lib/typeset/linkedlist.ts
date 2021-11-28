@@ -1,22 +1,22 @@
-export class Node {
+export class Node<T> {
   prev: any;
   next: any;
-  data: any;
+  data: T;
 
-  constructor(data) {
+  constructor(data: T) {
     this.prev = null;
     this.next = null;
     this.data = data;
   }
 
   toString() {
-    return this.data.toString();
+    return (this.data as any).toString();
   }
 }
 
-export class LinkedList {
-  head: any;
-  tail: any;
+export class LinkedList<T> {
+  head: Node<T> | null;
+  tail: Node<T> | null;
   listSize: any;
 
   constructor() {
@@ -62,7 +62,7 @@ export class LinkedList {
 
   // Note that modifying the list during
   // iteration is not safe.
-  forEach(fun) {
+  forEach(fun: (x: Node<T>) => void) {
     var node = this.head;
     while (node !== null) {
       fun(node);

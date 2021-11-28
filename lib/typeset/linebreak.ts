@@ -10,6 +10,26 @@ export const infinity = 10000;
  * All rights reserved.
  */
 
+type Demerits = {
+
+}
+
+type Candidate = {
+  active?: Breakpoint,
+  demerits: Demerits,
+  ratio?: number,
+}
+
+type Breakpoint = {
+  position: any,
+  demerits: number,
+  ratio: number,
+  line: any,
+  fitnessClass: any,
+  totals: any,
+  previous: any,
+}
+
 export function linebreak(nodes, lines, settings) {
   var options = {
     demerits: {
@@ -19,7 +39,7 @@ export function linebreak(nodes, lines, settings) {
     },
     tolerance: settings && settings.tolerance || 2
   },
-    activeNodes = new LinkedList(),
+    activeNodes = new LinkedList<Breakpoint>(),
     sum = {
       width: 0,
       stretch: 0,
@@ -33,7 +53,7 @@ export function linebreak(nodes, lines, settings) {
       }
     };
 
-  function breakpoint(position, demerits, ratio, line, fitnessClass, totals, previous) {
+  function breakpoint(position, demerits, ratio, line, fitnessClass, totals, previous): Breakpoint {
     return {
       position: position,
       demerits: demerits,
@@ -234,7 +254,7 @@ export function linebreak(nodes, lines, settings) {
         candidate = candidates[fitnessClass];
 
         if (candidate.demerits < Infinity) {
-          newNode = new Node(breakpoint(index, candidate.demerits, candidate.ratio,
+          newNode = new Node<Breakpoint>(breakpoint(index, candidate.demerits, candidate.ratio,
             candidate.active.data.line + 1, fitnessClass, tmpSum, candidate.active));
           if (active !== null) {
             activeNodes.insertBefore(active, newNode);
@@ -247,7 +267,7 @@ export function linebreak(nodes, lines, settings) {
   }
 
   // Add an active node for the start of the paragraph.
-  activeNodes.push(new Node(breakpoint(0, 0, 0, 0, 0, undefined, null)));
+  activeNodes.push(new Node<Breakpoint>(breakpoint(0, 0, 0, 0, 0, undefined, null)));
 
   nodes.forEach(function(node, index, nodes) {
     if (node.type === 'box') {
@@ -267,7 +287,7 @@ export function linebreak(nodes, lines, settings) {
 
   if (activeNodes.size() !== 0) {
     // Find the best active node (the one with the least total demerits.)
-    activeNodes.forEach(function(node) {
+    activeNodes.forEach(node => {
       if (node.data.demerits < tmp.data.demerits) {
         tmp = node;
       }
