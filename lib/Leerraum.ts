@@ -233,13 +233,28 @@ export function renderParagraph(paragraph: T.Paragraph): T.Renderer {
         } else if (node.value.type === 'glue') {
           x += node.value.width + line.ratio * (line.ratio < 0 ? node.value.shrink : node.value.stretch);
         } else if (node.value.type === 'penalty' && node.value.penalty === 100 && index === array.length - 1) {
-          text_nodes.push({
-            type: 'text',
-            x: x_ + x_offset + x_indent,
-            y: y_ + y_offset,
-            span: node.style,
-            text: '-',
-          });
+          // this is how we're testing for hyphens, I guess?
+
+          let add_hyphen = true;
+          if (text_nodes.length >= 1) {
+            const last_text_node = text_nodes[text_nodes.length - 1];
+            if (last_text_node.type == 'text') {
+              // remove trailing hyphen from preceding hyphenation segment, if any
+              console.log(`'${last_text_node.text}'`);
+              if (last_text_node.text.match(/-$/)) {
+                add_hyphen = false;
+              }
+            }
+          }
+          if (add_hyphen) {
+            text_nodes.push({
+              type: 'text',
+              x: x_ + x_offset + x_indent,
+              y: y_ + y_offset,
+              span: node.style,
+              text: '-',
+            });
+          }
         }
       });
     });
