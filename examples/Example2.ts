@@ -10,7 +10,31 @@ function rgb(r, g, b) {
   return '#' + ('0' + r.toString(16)).slice(-2) + ('0' + g.toString(16)).slice(-2) + ('0' + b.toString(16)).slice(-2);
 }
 
-const gridText = ' a grid is a structure (usually two-dimensional) made up of a series of intersecting straight (vertical, horizontal, and angular) or curved guide lines used to structure content. The grid serves as an armature or framework on which a designer can organize graphic elements (images, glyphs, paragraphs, etc.) in a rational, easy-to-absorb manner.';
+const gridTexts = `
+In Pengerrand there is a Serkaiba, an Arken neighborhood. It has the
+shape of a triangle. Its boundaries are now fairly fixed. It's only
+the youths who fight about the borders. Then again, it's also the
+Penger youths who venture curiously into the temple of Yailo, and the
+Wuchka, the domed screaming-house, and participate (tentatively or
+enthusiastically) in the sessions there, which to them are exotic.
+
+It begins with silence, and ends with silence: it is mysterious how
+the beginning and end of the noise is negotiated within the gathered
+crowd. The chants are formed of nonsense syllables. Some have loose
+conventional meanings, as musical scales have feelings. "Ha" is
+sadness, "Io" and "ia" are neutral. "Ze" is the expansive spirit of
+Yailo, the universal bird, that which contradicts the present-centric
+contemplation of bissholmi. It celebrates centrifugal motion, noise,
+exploration.
+
+Rhythms intersect and overlap. A given speaker may explore a theme
+consisting of patterns distributed across a pair of shouted syllables.
+A pair of participants improvise off of one another. The end of a
+session --- usually about a third of a medis, often even less ---
+ideally involves a crescendo and an abrupt, perfectly coordinated
+silence, during which the acoustics of the dome provide a resonant
+finish.
+`.replace(/ "/g, ' “').replace(/" /g, '” ').split('\n\n');
 const gridText2 = '...';
 
 const s: leer.Span =
@@ -79,6 +103,26 @@ function subtitle(subtitle: string): leer.Paragraph {
   };
 }
 
+function normalPara(text: string): leer.Text {
+  return [
+    {
+      ...p,
+      align: 'justify',
+      leftIndentation: x => x < 5 ? 12 * (5 - x) : 0,
+      rightIndentation: x => x < 5 ? 12 * (5 - x) : 0,
+      paragraphLeading: leading,
+      spans:
+        [
+          {
+            ...s,
+            fontSize: 12,
+            text: text,
+          },
+        ],
+    },
+  ];
+}
+
 function text(emphasized: string, text: string): leer.Text {
   return [
     {
@@ -125,28 +169,25 @@ function regularPolygon(edges: number, offseta: number, offsetx: number, offsety
   });
 }
 
+const paras = gridTexts.flatMap(t => [
+  leer.renderText(normalPara(t)),
+]);
+
 leer.renderToPDF('example.pdf', leer.formats.LETTER, [
   {
-    bboxes: leer.columnsWithMargins(leer.formats.LETTER, 1, 32, 32, 32, 32),
+    bboxes: leer.columnsWithMargins(leer.formats.LETTER, 32, 32, 32, 32, 32),
     renderer: leer.vertically(
       [
-        leer.renderParagraph(title('GRIDS')),
+        leer.renderParagraph(title('Serkaiba')),
 
-        leer.renderText(text('In graphic design,', gridText)),
+        ...paras,
 
-
-        gap(leading),
-
-        leer.renderText(text('Whil grid systems', gridText2)),
+        leer.renderText(text('Other Heading', gridText2)),
         leer.renderParagraph(subtitle('Polygons')),
 
+        leer.renderPolygon(regularPolygon(3, 0, 100, 100, 100), { fillColor: '#f07' }),
 
-
-        leer.renderPolygon(regularPolygon(8, 0, 100, 100, 100), { fillColor: '#770' }),
-
-
-
-        leer.renderText(text('Whil grid systems', gridText2)),
+        leer.renderText(text('Another Heading', gridText2)),
 
       ])
   }
