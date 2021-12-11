@@ -131,9 +131,8 @@ export function linebreak(nodes, lines, settings) {
 
   // The main loop of the algorithm
   function mainLoop(node, index, nodes) {
-    let active: Node<Breakpoint> | null = activeNodes[0];
+    let active: Breakpoint | null = activeNodes[0];
     if (active === null) throw "Invariant violation; should be at least one node at this point";
-    let next: Node<Breakpoint> | null = null;
     let ratio: any = 0;
     let demerits = 0;
     let candidates: any[] = [];
