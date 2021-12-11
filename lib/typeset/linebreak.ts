@@ -136,6 +136,7 @@ export function linebreak(nodes, lines, settings) {
   // The main loop of the algorithm
   function mainLoop(node, index, nodes) {
     let active: Node<Breakpoint> | null = activeNodes.first();
+    if (active === null) throw "Invariant violation; should be at least one node at this point";
     let next: Node<Breakpoint> | null = null;
     let ratio: any = 0;
     let demerits = 0;
@@ -146,6 +147,9 @@ export function linebreak(nodes, lines, settings) {
     let currentClass = 0;
     let fitnessClass;
     let candidate;
+
+    let ix = 0;
+    const nodesToRemove: { [t: number]: boolean } = {};
 
     // The inner loop iterates through all the active nodes with line < currentLine and then
     // breaks out to insert the new active node candidates before looking at the next active
@@ -167,6 +171,7 @@ export function linebreak(nodes, lines, settings) {
       // and deactivate current active nodes.
       while (active !== null) {
         next = activeNodes.next(active);
+
         currentLine = active.data.line + 1;
         ratio = computeCost(active.data.position, index, active.data, currentLine);
 
@@ -181,7 +186,8 @@ export function linebreak(nodes, lines, settings) {
         // of the paragraph when we want to remove all active nodes, but possibly have a final
         // candidate active node---if the paragraph can be set using the given tolerance value.)
         if (ratio < -1 || (node.type === 'penalty' && node.penalty === -infinity)) {
-          activeNodes.remove(active);
+          nodesToRemove[active.id] = true;
+          //activeNodes.remove(active);
         }
 
         // If the ratio is within the valid range of -1 <= ratio <= tolerance calculate the
@@ -235,6 +241,7 @@ export function linebreak(nodes, lines, settings) {
         }
 
         active = next;
+        ix++;
 
         // Stop iterating through active nodes to insert new candidate active nodes in the active list
         // before moving on to the active nodes for the next line.
@@ -246,6 +253,7 @@ export function linebreak(nodes, lines, settings) {
           break;
         }
       }
+      activeNodes.filter(x => !nodesToRemove[x.id]);
 
       tmpSum = computeSum(index);
 
