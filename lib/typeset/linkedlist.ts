@@ -55,17 +55,6 @@ export class LinkedList<T> {
   }
 
   insertBefore(node: Node<T>, newNode: Node<T>) {
-    newNode.prev = node.prev;
-    newNode.setNext(node);
-    if (node.prev === null) {
-      this.head = newNode;
-    } else {
-      node.prev.setNext(newNode);
-    }
-    node.prev = newNode;
-    this.listSize += 1;
-
-    // array version
     const ix = this.array.findIndex(x => x.id == node.id);
     if (ix == -1) { console.log(`couldn't find node in insertBefore`); }
     this.array.splice(ix, 0, newNode);
@@ -74,38 +63,12 @@ export class LinkedList<T> {
   }
 
   push(node: Node<T>) {
-    node.prev = this.tail;
-    if (this.head === null) {
-      this.head = node;
-      this.tail = node;
-    } else {
-      const tail = this.tail;
-      if (tail === null) throw 'nope'; // shouldn't be that head is non-null but tail is null
-      tail.setNext(node);
-      this.tail = node;
-    }
-    this.listSize += 1;
-
-    // array version
     this.array.push(node);
 
     return this;
   }
 
   remove(node: Node<T>) {
-    if (node.prev === null) {
-      this.head = node.getNext();
-    } else {
-      node.prev.setNext(node.getNext);
-    }
-    if (node.getNext() === null) {
-      this.tail = node.prev;
-    } else {
-      node.getNext().prev = node.prev;
-    }
-    this.listSize -= 1;
-
-    // array version
     const ix = this.array.findIndex(x => x.id == node.id);
     if (ix == -1) { console.log(`couldn't find node in remove`); }
     this.array.splice(ix, 1);
