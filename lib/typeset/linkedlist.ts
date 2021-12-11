@@ -43,12 +43,11 @@ export class LinkedList<T> {
     this.array.forEach(fun);
   }
 
-  insertBeforeNew(node: Node<T>, data: T) {
-    this.insertBefore(node, new Node(data));
+  insertBeforeNew(ix: number, data: T) {
+    this.insertBefore(ix, new Node(data));
   }
 
-  insertBefore(node: Node<T>, newNode: Node<T>) {
-    const ix = this.array.findIndex(x => x.id == node.id);
+  insertBefore(ix: number, newNode: Node<T>) {
     if (ix == -1) { console.log(`couldn't find node in insertBefore`); }
     this.array.splice(ix, 0, newNode);
 

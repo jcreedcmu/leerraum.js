@@ -259,7 +259,7 @@ export function linebreak(nodes, lines, settings) {
           const newNode = breakpoint(index, candidate.demerits, candidate.ratio,
             candidate.active.data.line + 1, fitnessClass, tmpSum, candidate.active);
           if (active !== null) {
-            activeNodes.insertBeforeNew(active, newNode);
+            activeNodes.insertBeforeNew(ix, newNode);
             ix++;
           } else {
             activeNodes.pushNew(newNode);
