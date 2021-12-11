@@ -1,16 +1,12 @@
-let idCounter = 0;
-
 function makeNode<T>(data: T): Node<T> {
   return new Node<T>(data);
 }
 
 export class Node<T> {
-  id: number;
   data: T;
 
   constructor(data: T) {
     this.data = data;
-    this.id = idCounter++;
   }
 
   toString() {
