@@ -1,4 +1,7 @@
+let idCounter = 0;
+
 export class Node<T> {
+  id: number;
   prev: any;
   next: any;
   data: T;
@@ -7,6 +10,7 @@ export class Node<T> {
     this.prev = null;
     this.next = null;
     this.data = data;
+    this.id = idCounter++;
   }
 
   toString() {
@@ -23,11 +27,6 @@ export class LinkedList<T> {
     this.head = null;
     this.tail = null;
     this.listSize = 0;
-  }
-
-
-  isLinked(node: Node<T> | null): boolean {
-    return !((node && node.prev === null && node.next === null && this.tail !== node && this.head !== node) || this.isEmpty());
   }
 
   size(): number {
@@ -53,9 +52,6 @@ export class LinkedList<T> {
   }
 
   insertBefore(node, newNode) {
-    if (!this.isLinked(node)) {
-      return this;
-    }
     newNode.prev = node.prev;
     newNode.next = node;
     if (node.prev === null) {
@@ -84,9 +80,6 @@ export class LinkedList<T> {
   }
 
   remove(node) {
-    if (!this.isLinked(node)) {
-      return this;
-    }
     if (node.prev === null) {
       this.head = node.next;
     } else {
