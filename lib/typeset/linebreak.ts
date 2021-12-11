@@ -1,4 +1,4 @@
-import { LinkedList, Node } from './linkedlist';
+import { Node, LinkedList, makeNode } from './linkedlist';
 
 export const infinity = 10000;
 
@@ -254,7 +254,7 @@ export function linebreak(nodes, lines, settings) {
         candidate = candidates[fitnessClass];
 
         if (candidate.demerits < Infinity) {
-          newNode = new Node<Breakpoint>(breakpoint(index, candidate.demerits, candidate.ratio,
+          newNode = makeNode<Breakpoint>(breakpoint(index, candidate.demerits, candidate.ratio,
             candidate.active.data.line + 1, fitnessClass, tmpSum, candidate.active));
           if (active !== null) {
             activeNodes.insertBefore(active, newNode);
@@ -267,7 +267,7 @@ export function linebreak(nodes, lines, settings) {
   }
 
   // Add an active node for the start of the paragraph.
-  activeNodes.push(new Node<Breakpoint>(breakpoint(0, 0, 0, 0, 0, undefined, null)));
+  activeNodes.push(makeNode<Breakpoint>(breakpoint(0, 0, 0, 0, 0, undefined, null)));
 
   nodes.forEach(function(node, index, nodes) {
     if (node.type === 'box') {

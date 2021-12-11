@@ -1,5 +1,9 @@
 let idCounter = 0;
 
+export function makeNode<T>(data: T): Node<T> {
+  return new Node<T>(data);
+}
+
 export class Node<T> {
   id: number;
   data: T;
