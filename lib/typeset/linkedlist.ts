@@ -25,50 +25,23 @@ export class LinkedList<T> {
     this.array = [];
   }
 
-  size(): number {
-    return this.array.length;
-  }
-
-  isEmpty(): boolean {
-    return this.array.length === 0;
-  }
-
   first(): Node<T> | null {
     return this.array[0];
   }
 
-  // Note that modifying the list during
-  // iteration is not safe.
   forEach(fun: (x: Node<T>) => void) {
     this.array.forEach(fun);
   }
 
   insertBeforeNew(ix: number, data: T) {
-    this.insertBefore(ix, new Node(data));
-  }
-
-  insertBefore(ix: number, newNode: Node<T>) {
-    if (ix == -1) { console.log(`couldn't find node in insertBefore`); }
-    this.array.splice(ix, 0, newNode);
-
-    return this;
+    this.array.splice(ix, 0, new Node(data));
   }
 
   pushNew(data: T) {
     this.array.push(new Node(data));
-
-    return this;
-  }
-
-  push(node: Node<T>) {
-    this.array.push(node);
-
-    return this;
   }
 
   remove(ix: number) {
     this.array.splice(ix, 1);
-
-    return this;
   }
 }
