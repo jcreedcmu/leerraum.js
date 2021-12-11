@@ -1,3 +1,8 @@
+// cd ~/proj/leerraum.js/
+// tsc -w
+// node js/examples/Example2.js
+// evince /tmp/example.pdf
+
 import * as leer from '../lib/Leerraum';
 
 const oswald = 'fonts/Oswald-Light.ttf';
@@ -173,7 +178,7 @@ const paras = gridTexts.flatMap(t => [
   leer.renderText(normalPara(t)),
 ]);
 
-leer.renderToPDF('example.pdf', leer.formats.LETTER, [
+leer.renderToPDF('/tmp/example.pdf', leer.formats.LETTER, [
   {
     bboxes: leer.columnsWithMargins(leer.formats.LETTER, 32, 32, 32, 32, 32),
     renderer: leer.vertically(
