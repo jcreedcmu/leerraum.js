@@ -1,6 +1,6 @@
 let idCounter = 0;
 
-export function makeNode<T>(data: T): Node<T> {
+function makeNode<T>(data: T): Node<T> {
   return new Node<T>(data);
 }
 
@@ -43,10 +43,20 @@ export class LinkedList<T> {
     this.array.forEach(fun);
   }
 
+  insertBeforeNew(node: Node<T>, data: T) {
+    this.insertBefore(node, new Node(data));
+  }
+
   insertBefore(node: Node<T>, newNode: Node<T>) {
     const ix = this.array.findIndex(x => x.id == node.id);
     if (ix == -1) { console.log(`couldn't find node in insertBefore`); }
     this.array.splice(ix, 0, newNode);
+
+    return this;
+  }
+
+  pushNew(data: T) {
+    this.array.push(new Node(data));
 
     return this;
   }
