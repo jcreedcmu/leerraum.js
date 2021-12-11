@@ -2,13 +2,9 @@ let idCounter = 0;
 
 export class Node<T> {
   id: number;
-  prev: any;
-  private _next: any;
   data: T;
 
   constructor(data: T) {
-    this.prev = null;
-    this._next = null;
     this.data = data;
     this.id = idCounter++;
   }
@@ -16,24 +12,13 @@ export class Node<T> {
   toString() {
     return (this.data as any).toString();
   }
-
-  getNext() { return this._next }
-
-  setNext(x: any) { this._next = x }
-
 }
 
 export class LinkedList<T> {
   array: Node<T>[];
-  head: Node<T> | null;
-  tail: Node<T> | null;
-  listSize: any;
 
   constructor() {
     this.array = [];
-    this.head = null;
-    this.tail = null;
-    this.listSize = 0;
   }
 
   size(): number {
