@@ -74,15 +74,4 @@ export class LinkedList<T> {
 
     return this;
   }
-
-  next(node: Node<T>) {
-    const ix = this.array.findIndex(x => x.id == node.id);
-    if (ix == -1 || ix == this.array.length - 1) { return null }
-
-    return this.array[ix + 1];
-  }
-
-  filter(keep: (x: Node<T>) => boolean): void {
-    this.array = this.array.filter(keep);
-  }
 }

@@ -169,8 +169,6 @@ export function linebreak(nodes, lines, settings) {
       // Iterate through the linked list of active nodes to find new potential active nodes
       // and deactivate current active nodes.
       while (active !== null) {
-        next = activeNodes.next(active);
-
         currentLine = active.data.line + 1;
         ratio = computeCost(active.data.position, index, active.data, currentLine);
 
@@ -239,12 +237,7 @@ export function linebreak(nodes, lines, settings) {
           }
         }
 
-        active = next;
-        ix++;
-
-        if (!((ix == activeNodes.array.length && !active) || activeNodes.array[ix] == active)) {
-          throw `inconsistent: ix=${ix} [${activeNodes.array.map(x => x.id)}] ${(active || { id: 999 }).id}`;
-        }
+        active = activeNodes.array[ix++] || null;
 
         // Stop iterating through active nodes to insert new candidate active nodes in the active list
         // before moving on to the active nodes for the next line.
