@@ -149,7 +149,6 @@ export function linebreak(nodes, lines, settings) {
     let candidate;
 
     let ix = 0;
-    const nodesToRemove: { [t: number]: boolean } = {};
 
     // The inner loop iterates through all the active nodes with line < currentLine and then
     // breaks out to insert the new active node candidates before looking at the next active
@@ -186,8 +185,8 @@ export function linebreak(nodes, lines, settings) {
         // of the paragraph when we want to remove all active nodes, but possibly have a final
         // candidate active node---if the paragraph can be set using the given tolerance value.)
         if (ratio < -1 || (node.type === 'penalty' && node.penalty === -infinity)) {
-          nodesToRemove[active.id] = true;
-          //activeNodes.remove(active);
+          activeNodes.remove(active);
+          ix--;
         }
 
         // If the ratio is within the valid range of -1 <= ratio <= tolerance calculate the
@@ -243,6 +242,10 @@ export function linebreak(nodes, lines, settings) {
         active = next;
         ix++;
 
+        if (!((ix == activeNodes.array.length && !active) || activeNodes.array[ix] == active)) {
+          throw `inconsistent: ix=${ix} [${activeNodes.array.map(x => x.id)}] ${(active || { id: 999 }).id}`;
+        }
+
         // Stop iterating through active nodes to insert new candidate active nodes in the active list
         // before moving on to the active nodes for the next line.
         // TODO: The Knuth and Plass paper suggests a conditional for currentLine < j0. This means paragraphs
@@ -253,7 +256,6 @@ export function linebreak(nodes, lines, settings) {
           break;
         }
       }
-      activeNodes.filter(x => !nodesToRemove[x.id]);
 
       tmpSum = computeSum(index);
 
@@ -265,6 +267,7 @@ export function linebreak(nodes, lines, settings) {
             candidate.active.data.line + 1, fitnessClass, tmpSum, candidate.active);
           if (active !== null) {
             activeNodes.insertBeforeNew(active, newNode);
+            ix++;
           } else {
             activeNodes.pushNew(newNode);
           }
