@@ -67,9 +67,7 @@ export class LinkedList<T> {
     return this;
   }
 
-  remove(node: Node<T>) {
-    const ix = this.array.findIndex(x => x.id == node.id);
-    if (ix == -1) { console.log(`couldn't find node in remove`); }
+  remove(ix: number) {
     this.array.splice(ix, 1);
 
     return this;

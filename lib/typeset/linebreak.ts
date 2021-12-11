@@ -183,11 +183,7 @@ export function linebreak(nodes, lines, settings) {
         // of the paragraph when we want to remove all active nodes, but possibly have a final
         // candidate active node---if the paragraph can be set using the given tolerance value.)
         if (ratio < -1 || (node.type === 'penalty' && node.penalty === -infinity)) {
-          if (!((ix == activeNodes.array.length && !active) || activeNodes.array[ix] == active)) {
-            throw `inconsistent: ix=${ix} [${activeNodes.array.map(x => x.id)}] ${(active || { id: 999 }).id}`;
-          }
-
-          activeNodes.remove(active);
+          activeNodes.remove(ix);
           ix--;
         }
 
