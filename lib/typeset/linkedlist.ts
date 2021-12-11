@@ -3,12 +3,12 @@ let idCounter = 0;
 export class Node<T> {
   id: number;
   prev: any;
-  next: any;
+  private _next: any;
   data: T;
 
   constructor(data: T) {
     this.prev = null;
-    this.next = null;
+    this._next = null;
     this.data = data;
     this.id = idCounter++;
   }
@@ -16,6 +16,11 @@ export class Node<T> {
   toString() {
     return (this.data as any).toString();
   }
+
+  getNext() { return this._next }
+
+  setNext(x: any) { this._next = x }
+
 }
 
 export class LinkedList<T> {
@@ -49,13 +54,13 @@ export class LinkedList<T> {
     this.array.forEach(fun);
   }
 
-  insertBefore(node, newNode) {
+  insertBefore(node: Node<T>, newNode: Node<T>) {
     newNode.prev = node.prev;
-    newNode.next = node;
+    newNode.setNext(node);
     if (node.prev === null) {
       this.head = newNode;
     } else {
-      node.prev.next = newNode;
+      node.prev.setNext(newNode);
     }
     node.prev = newNode;
     this.listSize += 1;
@@ -68,7 +73,7 @@ export class LinkedList<T> {
     return this;
   }
 
-  push(node) {
+  push(node: Node<T>) {
     node.prev = this.tail;
     if (this.head === null) {
       this.head = node;
@@ -76,7 +81,7 @@ export class LinkedList<T> {
     } else {
       const tail = this.tail;
       if (tail === null) throw 'nope'; // shouldn't be that head is non-null but tail is null
-      tail.next = node;
+      tail.setNext(node);
       this.tail = node;
     }
     this.listSize += 1;
@@ -87,16 +92,16 @@ export class LinkedList<T> {
     return this;
   }
 
-  remove(node) {
+  remove(node: Node<T>) {
     if (node.prev === null) {
-      this.head = node.next;
+      this.head = node.getNext();
     } else {
-      node.prev.next = node.next;
+      node.prev.setNext(node.getNext);
     }
-    if (node.next === null) {
+    if (node.getNext() === null) {
       this.tail = node.prev;
     } else {
-      node.next.prev = node.prev;
+      node.getNext().prev = node.prev;
     }
     this.listSize -= 1;
 
@@ -106,5 +111,9 @@ export class LinkedList<T> {
     this.array.splice(ix, 1);
 
     return this;
+  }
+
+  next<T>(node: Node<T>) {
+    return node.getNext();
   }
 }

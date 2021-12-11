@@ -167,7 +167,7 @@ export function linebreak(nodes, lines, settings) {
       // Iterate through the linked list of active nodes to find new potential active nodes
       // and deactivate current active nodes.
       while (active !== null) {
-        next = active.next;
+        next = activeNodes.next(active);
         currentLine = active.data.line + 1;
         ratio = computeCost(active.data.position, index, active.data, currentLine);
 
