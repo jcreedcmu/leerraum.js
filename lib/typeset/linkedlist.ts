@@ -114,6 +114,9 @@ export class LinkedList<T> {
   }
 
   next<T>(node: Node<T>) {
-    return node.getNext();
+    const ix = this.array.findIndex(x => x.id == node.id);
+    if (ix == -1 || ix == this.array.length - 1) { return null }
+
+    return this.array[ix + 1];
   }
 }
