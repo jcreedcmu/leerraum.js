@@ -48,9 +48,7 @@ export function linebreak(nodes, lines, settings) {
     lineLengths = lines,
     breaks: any = [],
     tmp: any = {
-      data: {
-        demerits: Infinity
-      }
+      demerits: Infinity
     };
 
   function breakpoint(position, demerits, ratio, line, fitnessClass, totals, previous): Breakpoint {
@@ -169,8 +167,8 @@ export function linebreak(nodes, lines, settings) {
       // Iterate through the linked list of active nodes to find new potential active nodes
       // and deactivate current active nodes.
       while (active !== null) {
-        currentLine = active.data.line + 1;
-        ratio = computeCost(active.data.position, index, active.data, currentLine);
+        currentLine = active.line + 1;
+        ratio = computeCost(active.position, index, active, currentLine);
 
         if (ratio === null) {
           active = null;
@@ -203,8 +201,8 @@ export function linebreak(nodes, lines, settings) {
             demerits = Math.pow(options.demerits.line + badness, 2);
           }
 
-          if (node.type === 'penalty' && nodes[active.data.position].type === 'penalty') {
-            demerits += options.demerits.flagged * node.flagged * nodes[active.data.position].flagged;
+          if (node.type === 'penalty' && nodes[active.position].type === 'penalty') {
+            demerits += options.demerits.flagged * node.flagged * nodes[active.position].flagged;
           }
 
           // Calculate the fitness class for this candidate active node.
@@ -220,12 +218,12 @@ export function linebreak(nodes, lines, settings) {
 
           // Add a fitness penalty to the demerits if the fitness classes of two adjacent lines
           // differ too much.
-          if (Math.abs(currentClass - active.data.fitnessClass) > 1) {
+          if (Math.abs(currentClass - active.fitnessClass) > 1) {
             demerits += options.demerits.fitness;
           }
 
           // Add the total demerits of the active node to get the total demerits of this candidate node.
-          demerits += active.data.demerits;
+          demerits += active.demerits;
 
           // Only store the best candidate for each fitness class
           if (demerits < candidates[currentClass].demerits) {
@@ -245,7 +243,7 @@ export function linebreak(nodes, lines, settings) {
         // with identical line lengths will not be sorted by line number. Find out if that is a desirable outcome.
         // For now I left this out, as it only adds minimal overhead to the algorithm and keeping the active node
         // list sorted has a higher priority.
-        if (active !== null && active.data.line >= currentLine) {
+        if (active !== null && active.line >= currentLine) {
           break;
         }
       }
@@ -257,7 +255,7 @@ export function linebreak(nodes, lines, settings) {
 
         if (candidate.demerits < Infinity) {
           const newNode = breakpoint(index, candidate.demerits, candidate.ratio,
-            candidate.active.data.line + 1, fitnessClass, tmpSum, candidate.active);
+            candidate.active.line + 1, fitnessClass, tmpSum, candidate.active);
           if (active !== null) {
             activeNodes.insertBeforeNew(ix, newNode);
             ix++;
@@ -291,17 +289,17 @@ export function linebreak(nodes, lines, settings) {
   if (activeNodes.array.length !== 0) {
     // Find the best active node (the one with the least total demerits.)
     activeNodes.forEach(node => {
-      if (node.data.demerits < tmp.data.demerits) {
+      if (node.demerits < tmp.demerits) {
         tmp = node;
       }
     });
 
     while (tmp !== null) {
       breaks.push({
-        position: tmp.data.position,
-        ratio: tmp.data.ratio
+        position: tmp.position,
+        ratio: tmp.ratio
       });
-      tmp = tmp.data.previous;
+      tmp = tmp.previous;
     }
     return breaks.reverse();
   }

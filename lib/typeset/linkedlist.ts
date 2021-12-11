@@ -1,21 +1,11 @@
+export type Node<T> = T;
+
 function makeNode<T>(data: T): Node<T> {
-  return new Node<T>(data);
-}
-
-export class Node<T> {
-  data: T;
-
-  constructor(data: T) {
-    this.data = data;
-  }
-
-  toString() {
-    return (this.data as any).toString();
-  }
+  return data;
 }
 
 export class LinkedList<T> {
-  array: Node<T>[];
+  array: T[];
 
   constructor() {
     this.array = [];
@@ -30,11 +20,11 @@ export class LinkedList<T> {
   }
 
   insertBeforeNew(ix: number, data: T) {
-    this.array.splice(ix, 0, new Node(data));
+    this.array.splice(ix, 0, data);
   }
 
   pushNew(data: T) {
-    this.array.push(new Node(data));
+    this.array.push(data);
   }
 
   remove(ix: number) {
