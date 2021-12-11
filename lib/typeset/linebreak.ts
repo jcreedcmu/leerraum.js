@@ -1,5 +1,3 @@
-import { Node, LinkedList } from './linkedlist';
-
 export const infinity = 10000;
 
 /**
@@ -38,13 +36,13 @@ export function linebreak(nodes, lines, settings) {
       fitness: settings && settings.demerits && settings.demerits.fitness || 3000
     },
     tolerance: settings && settings.tolerance || 2
+  };
+  const activeNodes: Breakpoint[] = [];
+  let sum = {
+    width: 0,
+    stretch: 0,
+    shrink: 0
   },
-    activeNodes = new LinkedList<Breakpoint>(),
-    sum = {
-      width: 0,
-      stretch: 0,
-      shrink: 0
-    },
     lineLengths = lines,
     breaks: any = [],
     tmp: any = {
@@ -133,7 +131,7 @@ export function linebreak(nodes, lines, settings) {
 
   // The main loop of the algorithm
   function mainLoop(node, index, nodes) {
-    let active: Node<Breakpoint> | null = activeNodes.first();
+    let active: Node<Breakpoint> | null = activeNodes[0];
     if (active === null) throw "Invariant violation; should be at least one node at this point";
     let next: Node<Breakpoint> | null = null;
     let ratio: any = 0;
@@ -181,7 +179,7 @@ export function linebreak(nodes, lines, settings) {
         // of the paragraph when we want to remove all active nodes, but possibly have a final
         // candidate active node---if the paragraph can be set using the given tolerance value.)
         if (ratio < -1 || (node.type === 'penalty' && node.penalty === -infinity)) {
-          activeNodes.remove(ix);
+          activeNodes.splice(ix, 1);
           ix--;
         }
 
@@ -235,7 +233,7 @@ export function linebreak(nodes, lines, settings) {
           }
         }
 
-        active = activeNodes.array[++ix] || null;
+        active = activeNodes[++ix] || null;
 
         // Stop iterating through active nodes to insert new candidate active nodes in the active list
         // before moving on to the active nodes for the next line.
@@ -257,10 +255,10 @@ export function linebreak(nodes, lines, settings) {
           const newNode = breakpoint(index, candidate.demerits, candidate.ratio,
             candidate.active.line + 1, fitnessClass, tmpSum, candidate.active);
           if (active !== null) {
-            activeNodes.insertBeforeNew(ix, newNode);
+            activeNodes.splice(ix, 0, newNode);
             ix++;
           } else {
-            activeNodes.pushNew(newNode);
+            activeNodes.push(newNode);
           }
         }
       }
@@ -268,7 +266,7 @@ export function linebreak(nodes, lines, settings) {
   }
 
   // Add an active node for the start of the paragraph.
-  activeNodes.pushNew(breakpoint(0, 0, 0, 0, 0, undefined, null));
+  activeNodes.push(breakpoint(0, 0, 0, 0, 0, undefined, null));
 
   nodes.forEach(function(node, index, nodes) {
     if (node.type === 'box') {
@@ -286,7 +284,7 @@ export function linebreak(nodes, lines, settings) {
   });
 
 
-  if (activeNodes.array.length !== 0) {
+  if (activeNodes.length !== 0) {
     // Find the best active node (the one with the least total demerits.)
     activeNodes.forEach(node => {
       if (node.demerits < tmp.demerits) {
