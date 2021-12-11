@@ -31,35 +31,22 @@ export class LinkedList<T> {
     this.listSize = 0;
   }
 
-  checkConsistency() {
-    const arrayIds = this.array.map(x => x.id);
-    const llIds: number[] = [];
-    this.forEach(x => llIds.push(x.id));
-    if (arrayIds.join(',') != llIds.join(',')) {
-      throw `inconsistent: ${arrayIds.join(',')} != ${llIds.join(',')}`;
-    }
-  }
-
   size(): number {
-    return this.listSize;
+    return this.array.length;
   }
 
   isEmpty(): boolean {
-    return this.listSize === 0;
+    return this.array.length === 0;
   }
 
   first(): Node<T> | null {
-    return this.head;
+    return this.array[0];
   }
 
   // Note that modifying the list during
   // iteration is not safe.
   forEach(fun: (x: Node<T>) => void) {
-    var node = this.head;
-    while (node !== null) {
-      fun(node);
-      node = node.next;
-    }
+    this.array.forEach(fun);
   }
 
   insertBefore(node, newNode) {
@@ -77,7 +64,6 @@ export class LinkedList<T> {
     const ix = this.array.findIndex(x => x.id == node.id);
     if (ix == -1) { console.log(`couldn't find node in insertBefore`); }
     this.array.splice(ix, 0, newNode);
-    this.checkConsistency();
 
     return this;
   }
@@ -97,7 +83,6 @@ export class LinkedList<T> {
 
     // array version
     this.array.push(node);
-    this.checkConsistency();
 
     return this;
   }
@@ -119,7 +104,6 @@ export class LinkedList<T> {
     const ix = this.array.findIndex(x => x.id == node.id);
     if (ix == -1) { console.log(`couldn't find node in remove`); }
     this.array.splice(ix, 1);
-    this.checkConsistency();
 
     return this;
   }
