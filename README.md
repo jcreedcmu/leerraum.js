@@ -1,5 +1,11 @@
 # leerraum.js
 
+## jcreed's notes
+
+This is me hacking around trying to see if I can get a pdf-generation pipeline I like.
+
+## Original README
+
 leerraum.js is a PDF typesetting / layouting library based on [typeset](https://github.com/bramstein/typeset) (which provides an implementation of the [Knuth and Plass line breaking algorithm](http://onlinelibrary.wiley.com/doi/10.1002/spe.4380111102/abstract)) and [pdfkit](http://pdfkit.org). Its goals are simplicity and perfect control over the positioning of graphic elements.
 
 ![Demo PDF](docs/images/example.png)
